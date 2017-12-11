@@ -46,11 +46,13 @@ Resources related to a users in the API.
                 "username":"zhang3"
                 "password":"zhang"
                 "email":"zhang3@mail2.sysu.edu.cn"
+                "phone":12345678901
             },{
                 "id":2
                 "username":"li4"
                 "password":"li"
                 "email":"li4@mail2.sysu.edu.cn"
+                "phone":12345678901
             }
         ]
 
@@ -62,6 +64,7 @@ Resources related to a users in the API.
             "username":"zhang3"
             "password":"zhang"
             "email":"zhang3@mail2.sysu.edu.cn"
+            "phone":12345678901
         }
 
 + Response 201 (application/json)
@@ -77,12 +80,13 @@ Resources related to a users in the API.
                 "username":"zhang3"
                 "password":"zhang"
                 "email":"zhang3@mail2.sysu.edu.cn"
+                "phone":12345678901
             }
 
 ### Get User by ID [GET /v1/users/{id}]
 
 + Parameters
-    - id : `1` (int, required) - User Name
+    - id : `1` (int, required) - User Id
 
 + Response 200 (application/json)
 
@@ -91,6 +95,77 @@ Resources related to a users in the API.
             "username":"zhang3"
             "password":"zhang"
             "email":"zhang3@mail2.sysu.edu.cn"
+            "phone":12345678901
         }
 
 # Group Meetings
+
+Resources related to  Meetings in the API.
+
+## Meetings Collection [/v1/meetings{?key}]
+
++ Parameters
+    - key : `1e3576bt` (string, required)
+
+### List all Meetings [GET]
+
++ Response 200 (application/json)
+
+        [
+            {
+                "mid":1
+                "Sponsor":"zhang3"
+                "Participators":["zhang"]
+                "Title":"m1"
+                "StartDate": 2000-01-01/00:00
+                "EndDate": 2018-01-01/00:00
+            }
+        ]
+
+### Create a New Meeting [POST]
+
++ Request (application/json)
+
+        {
+            "mid":2
+            "Sponsor":"zhang3"
+            "Participators":["zhang"]
+            "Title":"m2",
+            "StartDate": 2000-01-02/00:00
+            "EndDate": 2018-01-02/00:00
+        }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /meetings/2
+
+    + Body
+
+            {
+                "mid":2
+                "Sponsor":"zhang3"
+                "Participators":["zhang"]
+                "Title":"m2"
+                "StartDate": 2000-01-02/00:00
+                "EndDate": 2018-01-02/00:00
+                "error":none
+            }
+
+
+### Get meeting by ID [GET /v1/meetings/{mid}]
+
++ Parameters
+    - mid : `1` (int, required) - Meeting Id
+
++ Response 200 (application/json)
+
+        {
+            "mid":1
+            "Sponsor":"zhang3"
+            "Participators":["zhang"]
+            "Title":"m1"
+            "StartDate": 2000-01-01/00:00
+            "EndDate": 2018-01-01/00:00
+        }
