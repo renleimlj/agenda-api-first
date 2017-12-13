@@ -1,8 +1,7 @@
-package main
+package service
 
 import (
 	"database/sql"
-    
     _ "github.com/mattn/go-sqlite3"
 )
 
