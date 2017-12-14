@@ -10,8 +10,7 @@ import (
 func main() {
 	wsContainer := restful.NewContainer()
     wsContainer.Router(restful.CurlyRouter{})
-    m := service.MeetingResource{map[string]service.Meeting{}}
-    m.MeetingRegister(wsContainer)
+    service.MeetingRegister(wsContainer)
 
     log.Printf("start listening on localhost:8080")
     server := &http.Server{Addr: ":8080", Handler: wsContainer}
