@@ -105,15 +105,25 @@ func  ListAllUsers() map[string]User{
     return allUsers
 }
 
-func CreateMeeting(meeting Meeting) {
+func CreateMeeting(meeting Meeting) error {
 	db, err := sql.Open("sqlite3", "agenda.db")
+	if err != nil {
+		return err
+	}
     checkErr(err)
     stmt, err := db.Prepare("INSERT INTO meetinginfo(title, sponser, participator, start, end) values(?,?,?,?,?)")
+    if err != nil {
+		return err
+	}
 	checkErr(err)
 	temp := strings.Join(meeting.Pr, "/")
 	_, err = stmt.Exec(meeting.Title, meeting.Spon, temp, meeting.Start, meeting.End)
+	if err != nil {
+		return err
+	}
 	checkErr(err)
 	db.Close()
+	return nil
 }
 
 func split(s rune) bool {
