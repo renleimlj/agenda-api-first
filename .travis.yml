@@ -6,7 +6,8 @@ go:
 
 sudo: required
 
+services:
+- docker
 
 script:
-  - echo '服务端测试'
-  - go test -v ./service/
+- docker ps | grep -q blog
