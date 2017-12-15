@@ -6,6 +6,3 @@ go:
 
 sudo: required
 
-script:
-  - go test -v ./cli
-  - go test -v ./service
