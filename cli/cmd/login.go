@@ -16,9 +16,9 @@ package cmd
 
 import (
 	"fmt"
-	"Agenda/entity"
+	"agenda-api-first/cli/entity"
 	"github.com/spf13/cobra"
-	"Agenda/logger"
+	"agenda-api-first/cli/logger"
 )
 
 // loginCmd represents the login command

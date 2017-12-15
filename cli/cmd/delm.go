@@ -16,8 +16,8 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"Agenda/entity"
-	"Agenda/logger"
+	"agenda-api-first/cli/entity"
+	"agenda-api-first/cli/logger"
 	"io/ioutil"
 )
 
