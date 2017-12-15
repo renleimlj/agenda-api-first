@@ -6,3 +6,7 @@ go:
 
 sudo: required
 
+
+script:
+  - echo '服务端测试'
+  - go test -v ./service/
