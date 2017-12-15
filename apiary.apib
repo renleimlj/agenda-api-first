@@ -1,5 +1,5 @@
 FORMAT: 1A
-HOST: http://localhost:8080/
+HOST: http://polls.apiblueprint.org/
 
 # agenda
 
@@ -15,7 +15,7 @@ var request = require('request');
 
 request({
   method: 'POST',
-  url: 'https://localhost:8080/users',
+  url: 'http://localhost:8080/users',
   headers: {
     'Content-Type': 'application/json'
   },
@@ -43,7 +43,7 @@ request({
 + Request 
 var request = require('request');
 
-request('https://localhost:8080/users', function (error, response, body) {
+request('http://localhost:8080/users', function (error, response, body) {
   console.log('Status:', response.statusCode);
   console.log('Headers:', JSON.stringify(response.headers));
   console.log('Response:', body);
@@ -81,7 +81,7 @@ var request = require('request');
 
 request({
   method: 'POST',
-  url: 'https://localhost:8080/user/login',
+  url: 'http://localhost:8080/user/login',
   headers: {
     'Content-Type': 'application/json'
   },
@@ -99,6 +99,84 @@ request({
 
 "Wrong name or wrong password"
 
++ Response 401 ("text/plain")
+"Log out first"
+
 
 ### Log out[DELETE /user/logout/keys/{key}]
-+ Response 204
++ Response 204 ("text/plain")
+"byebye"
+
++ Response 401 (text/plain)
+"Wrong key"
+
+## meetings [/meetings]
+
+### Create Meeting [POST /meetings/keys/{key}]
++ Request
+var request = require('request');
+
+request({
+  method: 'POST',
+  url: 'http://localhost:8080/meetings/keys/63259110-7bba-4354-8086-a36724c33e47',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: "{\"Title\":\"m10\",\"Spon\":\"admin\",\"Pr\":[\"kity\", \"frank\"],\"Start\": \"2000-01-02/00:00\",\"End\": \"2018-01-02/00:00\"}"
+}, function (error, response, body) {
+  console.log('Status:', response.statusCode);
+  console.log('Headers:', JSON.stringify(response.headers));
+  console.log('Response:', body);
+});
++ Response 201 (application/json)
+{
+  "Title": "m10",
+  "Spon": "admin",
+  "Pr": [
+   "kity",
+   "frank"
+  ],
+  "Start": "2000-01-02/00:00",
+  "End": "2018-01-02/00:00"
+ }
+ 
++ Response 401 (text/plain)
+"Wrong key"
+
++ Response 400 ("text/plain")
+"Name conflict"
+
+## Query Meeting by Title [GET /meetings/{m-title}/keys/{key}]
++ Request
+var request = require('request');
+
+request('http://localhost:8080/meetings/m10/keys/63259110-7bba-4354-8086-a36724c33e47', function (error, response, body) {
+  console.log('Status:', response.statusCode);
+  console.log('Headers:', JSON.stringify(response.headers));
+  console.log('Response:', body);
+});
+
++ Response 200 (application/json)
+{
+  "Title": "m10",
+  "Spon": "admin",
+  "Pr": [
+   "kity",
+   "frank"
+  ],
+  "Start": "2000-01-02/00:00",
+  "End": "2018-01-02/00:00"
+ }
+ 
+ + Response 401 (text/plain)
+"Wrong key"
+
++ Response 400 ("text/plain")
+"No result"
+
+## Delete Meeting [DELETE /meetings/{m-title}/keys/{key}]
++ Response 204 ("text/plain")
+"Succeed"
+
++ Response 401 (text/plain)
+"Wrong key"

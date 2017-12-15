@@ -10,11 +10,9 @@ func UsersRegister(container *restful.Container) {
     ws.
     Path("/users").
         Consumes(restful.MIME_XML, restful.MIME_JSON).
-        Produces(restful.MIME_JSON, restful.MIME_XML) // you can specify this per route as well
-
+        Produces(restful.MIME_JSON, restful.MIME_XML)
     ws.Route(ws.POST("").To(cu))
     ws.Route(ws.GET("").To(au))
-
     container.Add(ws)
 }
 
@@ -24,9 +22,11 @@ func cu(request *restful.Request, response *restful.Response) {
     if err == nil {
         err1 := CreateUser(*usr)
         if err1 != nil {
-            response.WriteErrorString(http.StatusNotFound, err1.Error())
+            response.AddHeader("Content-Type", "text/plain")
+            response.WriteErrorString(http.StatusBadRequest, err1.Error())
         } else {
-            response.WriteEntity(usr)
+            response.AddHeader("Content-Type", "application/json")
+            response.WriteHeaderAndEntity(http.StatusCreated, usr)
         }
     } else {
         response.AddHeader("Content-Type", "text/plain")
@@ -36,6 +36,6 @@ func cu(request *restful.Request, response *restful.Response) {
 
 func au(request *restful.Request, response *restful.Response) {
     users := ListAllUsers()
-    response.WriteEntity(users)
+    response.WriteHeaderAndEntity(http.StatusOK, users)
 }
 

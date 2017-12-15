@@ -15,7 +15,6 @@ func MeetingRegister(container *restful.Container) {
     ws.Route(ws.POST("/keys/{key}").To(cm))
     ws.Route(ws.GET("/{m-title}/keys/{key}").To(qm))
     ws.Route(ws.DELETE("/{m-title}/keys/{key}").To(dm))
-
     container.Add(ws)
 }
 
@@ -26,16 +25,22 @@ func cm(request *restful.Request, response *restful.Response) {
         k := request.PathParameter("key")
         if FindUserbyKey(k) == "" {
             response.AddHeader("Content-Type", "text/plain")
-            response.WriteErrorString(http.StatusInternalServerError, "log in first")
+            response.WriteErrorString(http.StatusUnauthorized, "Wrong key")
+        } else {
+            if met.Spon != FindUserbyKey(k) {
+                response.AddHeader("Content-Type", "text/plain")
+                response.WriteErrorString(http.StatusBadRequest, "You should be the sponser")
             } else {
                 err1 := CreateMeeting(*met)
                 if err1 != nil {
-                    response.WriteErrorString(http.StatusNotFound, err1.Error())
+                    response.AddHeader("Content-Type", "text/plain")
+                    response.WriteErrorString(http.StatusBadRequest, "Name conflict")
                 } else {
-                    response.WriteEntity(met)
+                    response.AddHeader("Content-Type", "application/json")
+                    response.WriteHeaderAndEntity(http.StatusCreated, met)
                 }
             }
-
+        }
     } else {
         response.AddHeader("Content-Type", "text/plain")
         response.WriteErrorString(http.StatusInternalServerError, err.Error())
@@ -47,15 +52,16 @@ func qm(request *restful.Request, response *restful.Response) {
     k := request.PathParameter("key")
     if FindUserbyKey(k) == "" {
         response.AddHeader("Content-Type", "text/plain")
-        response.WriteErrorString(http.StatusInternalServerError, "log in first")
+        response.WriteErrorString(http.StatusUnauthorized, "Wrong key")
     } else {
         meetings := ListAllMeetings()
         met , ok := meetings[t]
         if !ok {
             response.AddHeader("Content-Type", "text/plain")
-            response.WriteErrorString(http.StatusNotFound, "User could not be found.")
+            response.WriteErrorString(http.StatusBadRequest, "No result")
         } else {
-            response.WriteEntity(met)
+            response.AddHeader("Content-Type", "application/json")
+            response.WriteHeaderAndEntity(http.StatusOK, met)
         }
     }
 }
@@ -65,18 +71,24 @@ func dm(request *restful.Request, response *restful.Response) {
     k := request.PathParameter("key")
     if FindUserbyKey(k) == "" {
         response.AddHeader("Content-Type", "text/plain")
-        response.WriteErrorString(http.StatusInternalServerError, "log in first")
+        response.WriteErrorString(http.StatusUnauthorized, "Wrong key")
     } else {
+        meetings := ListAllMeetings()
+        met , ok := meetings[t]
+        if ok {
+            if met.Spon != FindUserbyKey(k) {
+                response.AddHeader("Content-Type", "text/plain")
+                response.WriteErrorString(http.StatusUnauthorized, "You are not sponser of this meeting")
+                return
+            }
+        }
         err := DeleteMeeting(t)
         if err != nil {
             response.AddHeader("Content-Type", "text/plain")
-            response.WriteErrorString(http.StatusInternalServerError, "meeting not exists")
+            response.WriteErrorString(http.StatusInternalServerError, "")
         } else {
             response.AddHeader("Content-Type", "text/plain")
-            response.WriteErrorString(http.StatusInternalServerError, "meeting not exists")
+            response.WriteHeaderAndEntity(http.StatusNoContent, "succeed")
         }
     }
 }
-
-
-

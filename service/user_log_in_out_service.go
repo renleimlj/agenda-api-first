@@ -31,16 +31,23 @@ func login(request *restful.Request, response *restful.Response) {
         usr , ok := users[usrlog.Name]
         if !ok {
 	        response.AddHeader("Content-Type", "text/plain")
-	        response.WriteErrorString(http.StatusNotFound, "User could not be found.")
+	        response.WriteErrorString(http.StatusBadRequest, "Wrong name")
 	    } else {
-	        if usrlog.Password != usr.Password {
+	    	if isLogin(usrlog.Name) {
+	    		response.AddHeader("Content-Type", "text/plain")
+	    		response.WriteErrorString(http.StatusUnauthorized, "Log out first")
+	    	} else {
+	        	if usrlog.Password != usr.Password {
 	        		response.AddHeader("Content-Type", "text/plain")
-	        		response.WriteErrorString(http.StatusNotFound, "Wrong password")
+	        		response.WriteErrorString(http.StatusBadRequest, "Wrong password")
 	        	} else {
 	        		key := uuid.NewV4().String()
 	        		CreateKey(key, usr.Name)
-	        		response.WriteEntity(key)
+	        		//response.WriteEntity(key)
+	        		response.AddHeader("Content-Type", "text/plain")
+	   				response.WriteHeaderAndEntity(http.StatusCreated, key)
 	        	}
+	        }
 	    }
     } else {
         response.AddHeader("Content-Type", "text/plain")
@@ -50,13 +57,20 @@ func login(request *restful.Request, response *restful.Response) {
 
 func logout(request *restful.Request, response *restful.Response) {
     k := request.PathParameter("key")
-   	err := DeleteKey(k)
-   	if err != nil {
-		response.AddHeader("Content-Type", "text/plain")
-       	response.WriteErrorString(http.StatusNotFound, "User could not be found.")
-   	}
+    if FindUserbyKey(k) == "" {
+    	response.AddHeader("Content-Type", "text/plain")
+	    response.WriteErrorString(http.StatusUnauthorized, "Wrong key")
+    } else {
+	   	err := DeleteKey(k)
+	   	if err != nil {
+			response.AddHeader("Content-Type", "text/plain")
+	       	response.WriteErrorString(http.StatusInternalServerError, err.Error())
+	   	} else {
+	   		response.AddHeader("Content-Type", "text/plain")
+	   		response.WriteHeaderAndEntity(http.StatusNoContent, "byebye")
+	   	}
+    }
 }
-
 
 
 

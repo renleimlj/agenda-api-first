@@ -3,7 +3,6 @@ package service
 import (
 	"database/sql"
     _ "github.com/mattn/go-sqlite3"
-    "fmt"
     "strings"
 )
 
@@ -168,7 +167,6 @@ func ListAllMeetings() map[string]Meeting{
     }
     rows.Close()
     db.Close()
-    fmt.Println(allMeetings)
     return allMeetings
 }
 
@@ -263,10 +261,29 @@ func FindUserbyKey(target_key string) string {
     return ""
 }
 
+func isLogin(target_name string) bool {
+	db, err := sql.Open("sqlite3", "agenda.db")
+    checkErr(err)
+	rows, err := db.Query("SELECT * FROM keyinfo")
+    checkErr(err)
+    for rows.Next() {
+    	var key string
+    	var name string
+        err = rows.Scan(&key, &name)
+        checkErr(err)
+        if name == target_name {
+        	rows.Close()
+    		db.Close()
+         	return true
+    	}
+    }
+    rows.Close()
+    db.Close()
+    return false
+}
+
 func checkErr(err error) {
     if err != nil {
         panic(err)
     }
 }
-
-
