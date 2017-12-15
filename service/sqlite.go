@@ -3,7 +3,6 @@ package service
 import (
 	"database/sql"
     _ "github.com/mattn/go-sqlite3"
-    "fmt"
     "strings"
 )
 
@@ -26,9 +25,10 @@ func (u *User) Init(name, password, email, phone string) {
 	u.Phone= phone
 }
 
+
 /*
 func main() {
-	db, err := sql.Open("sqlite3", "./agenda.db")
+	db, err := sql.Open("sqlite3", "../agenda.db")
     checkErr(err)
 	sql_table := `
     CREATE TABLE IF NOT EXISTS userinfo (
@@ -50,7 +50,15 @@ func main() {
 	);
 	`
 	db.Exec(sql_table)
-	db.Close()
+
+	sql_table = `
+    CREATE TABLE IF NOT EXISTS keyinfo (
+	    key TEXT PRIMARY KEY NULL,
+	    name TEXT NULL
+	);
+	`
+    db.Exec(sql_table)
+    db.Close()
 
 	var u User
 	u.Init("ricky", "123", "123", "123")
@@ -74,17 +82,28 @@ func main() {
 	createMeeting(m)
 	listAllMeetings()
 	
-}*/
+}
+*/
 
 
-func CreateUser(user User) {
+func CreateUser(user User) error {
 	db, err := sql.Open("sqlite3", "agenda.db")
     checkErr(err)
+    if err != nil {
+		return err
+	}
 	stmt, err := db.Prepare("INSERT INTO userinfo(username, password, email, phone) values(?,?,?,?)")
 	checkErr(err)
+	if err != nil {
+		return err
+	}
 	_, err = stmt.Exec(user.Name, user.Password, user.Email, user.Phone)
 	checkErr(err)
+	if err != nil {
+		return err
+	}
 	db.Close()
+	return nil
 }
 
 func  ListAllUsers() map[string]User{
@@ -149,15 +168,123 @@ func ListAllMeetings() map[string]Meeting{
     }
     rows.Close()
     db.Close()
-    fmt.Println(allMeetings)
     return allMeetings
 }
 
+func DeleteMeeting(title string) error{
+	db, err := sql.Open("sqlite3", "agenda.db")
+    checkErr(err)
+    if err != nil {
+		return err
+	}
+	stmt, err := db.Prepare("delete from meetinginfo where title=?")
+	checkErr(err)
+	if err != nil {
+		return err
+	}
+	res, err1 := stmt.Exec(title)
+	checkErr(err1)
+	if err1 != nil {
+		return err1
+	}
+	_, err1 = res.RowsAffected()
+	checkErr(err1)
+	if err1 != nil {
+		return err1
+	}
+	db.Close()
+	return nil
+}
+
+func CreateKey(key ,name string) error {
+	db, err := sql.Open("sqlite3", "agenda.db")
+    checkErr(err)
+    if err != nil {
+		return err
+	}
+	stmt, err := db.Prepare("INSERT INTO keyinfo(key, name) values(?,?)")
+	checkErr(err)
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(key, name)
+	checkErr(err)
+	if err != nil {
+		return err
+	}
+	db.Close()
+	return nil
+}
+
+func DeleteKey(key string) error {
+	db, err := sql.Open("sqlite3", "agenda.db")
+    checkErr(err)
+    if err != nil {
+		return err
+	}
+	stmt, err := db.Prepare("delete from keyinfo where key=?")
+	checkErr(err)
+	if err != nil {
+		return err
+	}
+	res, err1 := stmt.Exec(key)
+	checkErr(err1)
+	if err1 != nil {
+		return err1
+	}
+	_, err1 = res.RowsAffected()
+	checkErr(err1)
+	if err1 != nil {
+		return err1
+	}
+	db.Close()
+	return nil
+}
+
+func FindUserbyKey(target_key string) string {
+	db, err := sql.Open("sqlite3", "agenda.db")
+    checkErr(err)
+	rows, err := db.Query("SELECT * FROM keyinfo")
+    checkErr(err)
+    for rows.Next() {
+    	var key string
+    	var name string
+        err = rows.Scan(&key, &name)
+        checkErr(err)
+        if key == target_key {
+        	rows.Close()
+    		db.Close()
+         	return name
+    	}
+    }
+    rows.Close()
+    db.Close()
+    return ""
+}
+
+func isLogin(target_name string) bool {
+	db, err := sql.Open("sqlite3", "agenda.db")
+    checkErr(err)
+	rows, err := db.Query("SELECT * FROM keyinfo")
+    checkErr(err)
+    for rows.Next() {
+    	var key string
+    	var name string
+        err = rows.Scan(&key, &name)
+        checkErr(err)
+        if name == target_name {
+        	rows.Close()
+    		db.Close()
+         	return true
+    	}
+    }
+    rows.Close()
+    db.Close()
+    return false
+}
 
 func checkErr(err error) {
     if err != nil {
         panic(err)
     }
 }
-
-
