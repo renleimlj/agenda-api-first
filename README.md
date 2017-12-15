@@ -1,7 +1,5 @@
 # 服务程序开发实战 - Agenda
 
-[![Build Status](https://s1.ax1x.com/2017/12/16/L3G7j.png)](https://travis-ci.org/renleimlj/agenda-api-first)
-
 ## 概述
 
 利用命令行 或 web 客户端调用远端服务是服务开发的重要内容。其中，要点是如何实现 API First 开发，使得团队协作变得更有效率。
