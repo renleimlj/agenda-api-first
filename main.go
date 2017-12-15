@@ -1,7 +1,7 @@
 package main
 
 import (
-	"./service"
+	"agenda-api-first/service"
 	"log"
 	"github.com/emicklei/go-restful"
 	"net/http"

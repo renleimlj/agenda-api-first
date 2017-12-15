@@ -1,13 +1,3 @@
 language: go
-
 go:
   - 1.8
-  - matser
-
-sudo: required
-
-services:
-- docker
-
-script:
-- docker ps | grep -q blog
