@@ -25,6 +25,7 @@ func (u *User) Init(name, password, email, phone string) {
 	u.Phone= phone
 }
 
+
 /*
 func main() {
 	db, err := sql.Open("sqlite3", "../agenda.db")
