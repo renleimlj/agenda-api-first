@@ -1,22 +1,11 @@
 language: go
 
 go:
-  - 1.9
-  - tip
+  - 1.8
+  - matser
 
-notifications:
-  email: false
-
-go_import_path:
-  #/
-
-before_install:
-  - mv $HOME/gopath/src/github.com/renleimlj/agenda-api-first $HOME/gopath/src
-  - go get -t -v agenda-api-first/service/...
-  - cd $HOME/gopath/src/agenda-api-first
-
-install: true
+sudo: required
 
 script:
-  - go test -v agenda-api-first/service/sqlite
-  - go test -v agenda-api-first/service/user_service
+  - go test -v ./cli
+  - go test -v ./service
