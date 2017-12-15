@@ -1,168 +1,104 @@
 FORMAT: 1A
-HOST: http://agenda14.apiblueprint.org/
+HOST: http://localhost:8080/
 
-# Agenda
+# agenda
 
 Agenda is a simple API allowing consumers to schedule meeting on-line
 
-# Group User
 
-Resource operations related to a user in the API.
+## users [/users]
+Next 2 apis are irrelevant to key
 
-## User-Key [/v1/user/getkey{?username,password}]
+### Register [POST]
++ Request 
+var request = require('request');
 
-+ Parameters
-    - username : `root` (string, required) - User Name
-    - password : `pass` (required)
-
-### Get User Key [GET]
-
-get a security key for operations later
-
-+ Response 200 (application/json)
-
-        {
-            "key":"1e3576bt"
-            "permissions":["user","admin"]
-        }
-
-
-# Group Users
-
-Resources related to a users in the API.
-
-## Users Collection [/v1/users{?key}]
-
-+ Parameters
-    - key : `1e3576bt` (string, required)
-
-### List all Users [GET]
-
-+ Response 200 (application/json)
-
-        [
-            {
-                "id":1
-                "username":"zhang3"
-                "password":"zhang"
-                "email":"zhang3@mail2.sysu.edu.cn"
-                "phone":12345678901
-            },{
-                "id":2
-                "username":"li4"
-                "password":"li"
-                "email":"li4@mail2.sysu.edu.cn"
-                "phone":12345678901
-            }
-        ]
-
-### Create a New User [POST]
-
-+ Request (application/json)
-
-        {
-            "username":"zhang3"
-            "password":"zhang"
-            "email":"zhang3@mail2.sysu.edu.cn"
-            "phone":12345678901
-        }
+request({
+  method: 'POST',
+  url: 'https://localhost:8080/users',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: "{  \"Name\": \"admin\",  \"Password\": \"123456\",  \"Email\": \"2496063488@qq.com\", \"Phone\":\"13709095674\"}"
+}, function (error, response, body) {
+  console.log('Status:', response.statusCode);
+  console.log('Headers:', JSON.stringify(response.headers));
+  console.log('Response:', body);
+});
 
 + Response 201 (application/json)
 
-    + Headers
+        {
+            "Name": "admin",
+            "Password": "123456",
+            "Email": "2496063488@qq.com",
+            "Phone": "13709095674"
+        }
+        
++ Response 400 ("text/plain")
 
-            Location: /users/1
+"Name conflict"
 
-    + Body
+### List All Users [GET]
++ Request 
+var request = require('request');
 
-            {
-                "id": 1
-                "username":"zhang3"
-                "password":"zhang"
-                "email":"zhang3@mail2.sysu.edu.cn"
-                "phone":12345678901
-            }
-
-### Get User by ID [GET /v1/users/{id}]
-
-+ Parameters
-    - id : `1` (int, required) - User Id
+request('https://localhost:8080/users', function (error, response, body) {
+  console.log('Status:', response.statusCode);
+  console.log('Headers:', JSON.stringify(response.headers));
+  console.log('Response:', body);
+});
 
 + Response 200 (application/json)
 
-        {
-            "id" : 1
-            "username":"zhang3"
-            "password":"zhang"
-            "email":"zhang3@mail2.sysu.edu.cn"
-            "phone":12345678901
-        }
+    {
+      "kity": {
+       "Name": "kity",
+       "Password": "123",
+       "Email": "123",
+       "Phone": "123"
+      },
+      "land": {
+       "Name": "land",
+       "Password": "123",
+       "Email": "123",
+       "Phone": "123"
+      },
+      "ricky": {
+       "Name": "ricky",
+       "Password": "123",
+       "Email": "123",
+       "Phone": "123"
+      }
+    }
 
-# Group Meetings
+## user [/user]
+User login and logout
 
-Resources related to  Meetings in the API.
+### Log in [POST /user/login]
++ Request
+var request = require('request');
 
-## Meetings Collection [/v1/meetings{?key}]
-
-+ Parameters
-    - key : `1e3576bt` (string, required)
-
-### List all Meetings [GET]
-
-+ Response 200 (application/json)
-
-        [
-            {
-                "mid":1
-                "Sponsor":"zhang3"
-                "Participators":["zhang"]
-                "Title":"m1"
-                "StartDate": 2000-01-01/00:00
-                "EndDate": 2018-01-01/00:00
-            }
-        ]
-
-### Create a New Meeting [POST]
-
-+ Request (application/json)
-
-        {
-            "Title":"m2",
-            "Sponsor":"zhang3",
-            "Participators":["zhang"],
-            "StartDate": "2000-01-02/00:00",
-            "EndDate": "2018-01-02/00:00"
-        }
+request({
+  method: 'POST',
+  url: 'https://localhost:8080/user/login',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: "{  \"Name\": \"admin\",  \"Password\": \"123456\"}"
+}, function (error, response, body) {
+  console.log('Status:', response.statusCode);
+  console.log('Headers:', JSON.stringify(response.headers));
+  console.log('Response:', body);
+});
 
 + Response 201 (application/json)
+{"key":"63259110-7bba-4354-8086-a36724c33e47"}
 
-    + Headers
++ Response 400 ("text/plain")
 
-            Location: /meetings/2
-
-    + Body
-
-            {
-                "Title":"m2",
-                "Sponsor":"zhang3",
-                "Participators":["zhang"],
-                "StartDate": "2000-01-02/00:00",
-                "EndDate": "2018-01-02/00:00"
-            }
+"Wrong name or wrong password"
 
 
-### Get meeting by ID [GET /v1/meetings/{mid}]
-
-+ Parameters
-    - mid : `1` (int, required) - Meeting Id
-
-+ Response 200 (application/json)
-
-        {
-            "mid":1
-            "Sponsor":"zhang3"
-            "Participators":["zhang"]
-            "Title":"m1"
-            "StartDate": 2000-01-01/00:00
-            "EndDate": 2018-01-01/00:00
-        }
+### Log out[DELETE /user/logout/keys/{key}]
++ Response 204

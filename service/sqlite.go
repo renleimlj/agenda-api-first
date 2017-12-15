@@ -172,6 +172,31 @@ func ListAllMeetings() map[string]Meeting{
     return allMeetings
 }
 
+func DeleteMeeting(title string) error{
+	db, err := sql.Open("sqlite3", "agenda.db")
+    checkErr(err)
+    if err != nil {
+		return err
+	}
+	stmt, err := db.Prepare("delete from meetinginfo where title=?")
+	checkErr(err)
+	if err != nil {
+		return err
+	}
+	res, err1 := stmt.Exec(title)
+	checkErr(err1)
+	if err1 != nil {
+		return err1
+	}
+	_, err1 = res.RowsAffected()
+	checkErr(err1)
+	if err1 != nil {
+		return err1
+	}
+	db.Close()
+	return nil
+}
+
 func CreateKey(key ,name string) error {
 	db, err := sql.Open("sqlite3", "agenda.db")
     checkErr(err)

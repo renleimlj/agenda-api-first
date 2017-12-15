@@ -3,7 +3,6 @@ package service
 import(
     "net/http"
     "github.com/emicklei/go-restful"
-    "fmt"
 )
 
 func MeetingRegister(container *restful.Container) {
@@ -46,18 +45,38 @@ func cm(request *restful.Request, response *restful.Response) {
 func qm(request *restful.Request, response *restful.Response) {
     t := request.PathParameter("m-title")
     k := request.PathParameter("key")
-    fmt.Println(k)
-    meetings := ListAllMeetings()
-    met , ok := meetings[t]
-    if !ok {
+    if FindUserbyKey(k) == "" {
         response.AddHeader("Content-Type", "text/plain")
-        response.WriteErrorString(http.StatusNotFound, "User could not be found.")
+        response.WriteErrorString(http.StatusInternalServerError, "log in first")
     } else {
-        response.WriteEntity(met)
+        meetings := ListAllMeetings()
+        met , ok := meetings[t]
+        if !ok {
+            response.AddHeader("Content-Type", "text/plain")
+            response.WriteErrorString(http.StatusNotFound, "User could not be found.")
+        } else {
+            response.WriteEntity(met)
+        }
     }
 }
 
-func dm(request *restful.Request, response *restful.Response) {}
+func dm(request *restful.Request, response *restful.Response) {
+    t := request.PathParameter("m-title")
+    k := request.PathParameter("key")
+    if FindUserbyKey(k) == "" {
+        response.AddHeader("Content-Type", "text/plain")
+        response.WriteErrorString(http.StatusInternalServerError, "log in first")
+    } else {
+        err := DeleteMeeting(t)
+        if err != nil {
+            response.AddHeader("Content-Type", "text/plain")
+            response.WriteErrorString(http.StatusInternalServerError, "meeting not exists")
+        } else {
+            response.AddHeader("Content-Type", "text/plain")
+            response.WriteErrorString(http.StatusInternalServerError, "meeting not exists")
+        }
+    }
+}
 
 
 
