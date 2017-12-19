@@ -100,8 +100,15 @@ Server:
 
 ### docker 本地测试
 
+在容器中运行
+
+
+curl检查结果
+
+
 
 ### 上传镜像
+
 
 
 ### portainer
