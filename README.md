@@ -16,7 +16,21 @@
 
 1. 利用 dockerfile 在 docker hub 上构建一个镜像，同时包含 agenda cli 和 agenda service， 如果 mysql 包含 服务器 和 客户端一样
 
-## 镜像下载截图
+## 镜像截图
+
+使用国内的Docker仓库daocloud。
+
+跑hello-world的demo镜像。
+
+ ![](http://img.blog.csdn.net/20171219224244119)
+
+`docker build -t agenda`
+
+![](http://img.blog.csdn.net/20171219224058253)
+
+使用`golang:latest`得到3个images。。
+
+![](http://img.blog.csdn.net/20171219224213662 )
 
 ## 服务器测试截图
 
