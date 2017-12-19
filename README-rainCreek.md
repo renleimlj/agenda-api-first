@@ -12,14 +12,14 @@
 
 在测试能否正常使用的时候，遇到的问题：
 
-![]（http://img.blog.csdn.net/20171219224315099 ）
+ ![](http://img.blog.csdn.net/20171219224315099)
 
 解决：
 使用国内的Docker仓库daocloud。
 
 然后就可以跑hello-world的demo镜像了。
 
-![]（http://img.blog.csdn.net/20171219224244119 ）
+ ![](http://img.blog.csdn.net/20171219224244119)
 
 
 ### 编写dockerfile
@@ -65,7 +65,7 @@ Get https://golang:1/v2/: net/http: request canceled while waiting for connectio
 docker build -t agenda .
 ```
 
-![]（http://img.blog.csdn.net/20171219224058253 ）
+![](http://img.blog.csdn.net/20171219224058253)
 
 
 为啥要用1golang：1.81呢。想试试看别的版本会怎样，于是看了一下我的`docker version`，发现时1.8.3版本的，就想用`golang:1.8.3`建个镜像。
@@ -95,7 +95,7 @@ Server:
 
 得到3个images，show一下，来个大合照。
 
-![]（http://img.blog.csdn.net/20171219224213662 ）
+![](http://img.blog.csdn.net/20171219224213662 )
 
 
 ### docker 本地测试
