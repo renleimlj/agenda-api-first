@@ -5,7 +5,7 @@
 * 安装图形化管理界面portainer
 * 将镜像push到docker hub
 
-## 镜像下载截图
+## 工作工程及重要截图
 
 ### docker安装
 过程略。
