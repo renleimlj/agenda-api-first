@@ -68,7 +68,7 @@ docker build -t agenda .
 ![](http://img.blog.csdn.net/20171219224058253)
 
 
-为啥要用1golang：1.81呢。想试试看别的版本会怎样，于是看了一下我的`docker version`，发现时1.8.3版本的，就想用`golang:1.8.3`建个镜像。
+为啥要用`golang：1.8`呢。想试试看别的版本会怎样，于是看了一下我的`docker version`，发现时1.8.3版本的，就想用`golang:1.8.3`建个镜像。
 
 ```
 rao@rao-HP-Pavilion-Notebook:~/Desktop/serviceComputing/goworkplace/src/github.com/agenda-api-first$ sudo docker version
