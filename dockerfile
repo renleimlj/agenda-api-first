@@ -1,11 +1,7 @@
 FROM golang:1.8
-
-
-
-WORKDIR $GOPATH/src/github.com/renleimlj/agenda-api-first/cli
-
-ADD . $GOPATH/src/github.com/renleimlj/agenda-api-first
-
+COPY . "G:/GoWorks/src/agenda-api-first"
+RUN cd "G:/GoWorks/src/agenda-api-first/cli" && go get -v && go install -v
+RUN cd "G:/GoWorks/src/agenda-api-first/service" && go get -v && go install -v
+WORKDIR /
 EXPOSE 8080
-
-CMD  $GOPATH/src/github.com/renleimlj/agenda-api-first/main
+VOLUME ["/data"]
