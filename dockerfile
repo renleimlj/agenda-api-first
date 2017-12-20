@@ -5,3 +5,4 @@ RUN cd "G:/GoWorks/src/agenda-api-first/service" && go get -v && go install -v
 WORKDIR /
 EXPOSE 8080
 VOLUME ["/data"]
+
