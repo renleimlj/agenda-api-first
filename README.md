@@ -24,11 +24,12 @@
 
  ![](http://img.blog.csdn.net/20171219224244119)
 
+使用`golang:1.8`生成镜像
 `docker build -t agenda`
 
 ![](http://img.blog.csdn.net/20171219224058253)
 
-使用`golang:latest`得到3个images。。
+`docker images`
 
 ![](http://img.blog.csdn.net/20171219224213662 )
 
