@@ -17,6 +17,8 @@ import (
   "github.com/spf13/cobra"
   "agenda-api-first/cli/logger"
   "io/ioutil"
+  "strings"
+  "agenda-api-first/cli/entity"
 )
 
 // addPrCmd represents the addPr command
@@ -33,8 +35,9 @@ to quickly create a Cobra application.`,
     title, _ := cmd.Flags().GetString("title") 
     prs, _ := cmd.Flags().GetString("pr") 
     prs_arr := strings.Split(prs, ",") 
+    meeting := entity.QueryMeetingByTitle(title)
     for _, each := range prs_arr { 
-      meeting.AddParticipant(title, each)
+      meeting.AddParticipator(each)
       bytes,_ := ioutil.ReadFile("./CurUser")
       curuser := string(bytes)
       logger.Log("'" + curuser + "' called: addPr, title: " + title + ", participators: " + prs)
@@ -55,6 +58,5 @@ func init() {
   // is called directly, e.g.:
   // addPrCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
   addPrCmd.Flags().StringP("title", "t", "", "The title of the meeting the pr wanting to add in.")
-  addPrCmd.Flags().StringP("pr", "p", "", "The pr wanting to add in.Please split by ",".") 
+  addPrCmd.Flags().StringP("pr", "p", "", "The pr wanting to add in.Please split by comma .") 
 }
-
