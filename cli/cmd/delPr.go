@@ -19,6 +19,7 @@ import (
   "strings"
   "agenda-api-first/cli/logger"
   "io/ioutil"
+  "agenda-api-first/cli/entity"
 )
 
 // delPrCmd represents the delPr command
@@ -35,8 +36,9 @@ to quickly create a Cobra application.`,
     title, _ := cmd.Flags().GetString("title") 
     prs, _ := cmd.Flags().GetString("pr") 
     prs_arr := strings.Split(prs, ",") 
+    meeting := entity.QueryMeetingByTitle(title)
     for _, each := range prs_arr { 
-      meeting.DeleteParticipant(title, each)
+      meeting.DeleteParticipator(each)
       bytes,_ := ioutil.ReadFile("./CurUser")
       curuser := string(bytes)
       logger.Log("'" + curuser + "' called: delPr, title: " + title + ", participators: " + prs)
@@ -57,5 +59,5 @@ func init() {
   // is called directly, e.g.:
   // delPrCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
   delPrCmd.Flags().StringP("title", "t", "", "The title of the meeting the pr wanting to quit.")
-  delPrCmd.Flags().StringP("pr", "p", "", "The pr wanting to quit. Please split by ",".") 
+  delPrCmd.Flags().StringP("pr", "p", "", "The pr wanting to quit. Please split by ','.") 
 }
