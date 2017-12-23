@@ -2,7 +2,7 @@
 ## 我的工作
 
 * 编写dockerfile
-* 安装图形化管理界面portainer
+* 调试程序，修复bug，生成镜像
 * 将镜像push到docker hub
 
 ## 工作工程及重要截图
@@ -39,6 +39,7 @@ Get https://golang:1/v2/: dial tcp 221.179.46.190:1: getsockopt: connection refu
 ```
 
 用curl测试`https://golang:1/v2/`
+ 
 ```
 rao@rao-HP-Pavilion-Notebook:~/Desktop/serviceComputing/goworkplace/src/github.com/agenda-api-first$ curl https://golang:1/v2/
 
@@ -46,6 +47,8 @@ curl: (7) Failed to connect to golang port 1: Connection refused
 ```
 
 很难过了。
+
+
 和同学交流后，同学认为是被墙了。国内仓库不管用了，建议我改hosts。
 
 
@@ -98,19 +101,80 @@ Server:
 ![](http://img.blog.csdn.net/20171219224213662 )
 
 
-### docker 本地测试
-
-在容器中运行
-
-
-curl检查结果
-
 
 
 ### 上传镜像
 
+利用dockerhub的自动生成功能再次创建该镜像，并成功上传。
+
+![](http://img.blog.csdn.net/20171223140230902 )
+
+```
+Building in Docker Cloud's infrastructure...
+Cloning into '.'...
+
+KernelVersion: 4.4.0-93-generic
+Arch: amd64
+BuildTime: 2017-08-17T22:50:04.828747906+00:00
+ApiVersion: 1.30
+Version: 17.06.1-ce
+MinAPIVersion: 1.12
+GitCommit: 874a737
+Os: linux
+GoVersion: go1.8.3
+Starting build of index.docker.io/raincreek/agenda-api-first3:latest...
+Step 1/6 : FROM golang:1.8
+
+ ---> ba52c9ef0f5c
+
+Step 2/6 : WORKDIR $GOPATH/src/agenda-api-first/cli
+
+ ---> 63dec7122cf4
+
+Removing intermediate container 406e761c5cd7
+
+Step 3/6 : ADD . $GOPATH/src/agenda-api-first
+
+ ---> 680537a2dcf9
+
+Removing intermediate container ee6e41534ed0
+
+Step 4/6 : EXPOSE 8080
+
+ ---> Running in a01cb9394b32
+
+ ---> dcd17279a060
+
+Removing intermediate container a01cb9394b32
+
+Step 5/6 : CMD agenda-api-first/main
+
+ ---> Running in 903bca4ad90b
+
+ ---> 888bea1928b6
+
+Removing intermediate container 903bca4ad90b
+
+Step 6/6 : VOLUME /data
+
+ ---> Running in 590e5ad35228
+
+ ---> 368b87105303
+
+Removing intermediate container 590e5ad35228
+
+Successfully built 368b87105303
+
+Successfully tagged raincreek/agenda-api-first3:latest
+
+Pushing index.docker.io/raincreek/agenda-api-first3:latest...
+Done!
+Build finished
+```
 
 
-### portainer
+[【镜像地址】](https://hub.docker.com/r/raincreek/agenda-api-first3/builds/)
+
+
 
 
