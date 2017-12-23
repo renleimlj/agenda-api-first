@@ -2,7 +2,7 @@
 ## 我的工作
 
 * 编写dockerfile
-* 调试程序，修复潜在bug
+* 调试程序，修复bug，生成镜像
 * 将镜像push到docker hub
 
 ## 工作工程及重要截图
@@ -98,8 +98,6 @@ Server:
 
 ![](http://img.blog.csdn.net/20171219224213662 )
 
-
-### docker 本地测试
 
 
 
