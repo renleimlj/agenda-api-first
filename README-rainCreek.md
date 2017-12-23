@@ -2,7 +2,7 @@
 ## 我的工作
 
 * 编写dockerfile
-* 安装图形化管理界面portainer
+* 调试程序，修复潜在bug
 * 将镜像push到docker hub
 
 ## 工作工程及重要截图
@@ -39,6 +39,7 @@ Get https://golang:1/v2/: dial tcp 221.179.46.190:1: getsockopt: connection refu
 ```
 
 用curl测试`https://golang:1/v2/`
+ 
 ```
 rao@rao-HP-Pavilion-Notebook:~/Desktop/serviceComputing/goworkplace/src/github.com/agenda-api-first$ curl https://golang:1/v2/
 
@@ -100,17 +101,17 @@ Server:
 
 ### docker 本地测试
 
-在容器中运行
-
-
-curl检查结果
-
 
 
 ### 上传镜像
 
+利用dockerhub的自动生成功能再次创建该镜像，并成功上传。
+
+![](http://img.blog.csdn.net/20171223140230902 )
 
 
-### portainer
+[【镜像地址】](https://hub.docker.com/r/raincreek/agenda-api-first3/builds/)
+
+
 
 
